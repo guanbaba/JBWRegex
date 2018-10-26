@@ -1,0 +1,8 @@
+E:\testProject\testProject\bin\Debug\testProject.exe.config
+E:\testProject\testProject\bin\Debug\testProject.exe
+E:\testProject\testProject\bin\Debug\testProject.pdb
+E:\testProject\testProject\bin\Debug\JBWRegex.dll
+E:\testProject\testProject\bin\Debug\JBWRegex.pdb
+E:\testProject\testProject\obj\Debug\testProject.csprojResolveAssemblyReference.cache
+E:\testProject\testProject\obj\Debug\testProject.exe
+E:\testProject\testProject\obj\Debug\testProject.pdb

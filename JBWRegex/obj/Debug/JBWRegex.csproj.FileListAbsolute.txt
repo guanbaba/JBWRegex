@@ -1,0 +1,5 @@
+E:\testProject\JBWRegex\bin\Debug\JBWRegex.dll
+E:\testProject\JBWRegex\bin\Debug\JBWRegex.pdb
+E:\testProject\JBWRegex\obj\Debug\JBWRegex.dll
+E:\testProject\JBWRegex\obj\Debug\JBWRegex.pdb
+E:\testProject\JBWRegex\obj\Debug\JBWRegex.csprojResolveAssemblyReference.cache
