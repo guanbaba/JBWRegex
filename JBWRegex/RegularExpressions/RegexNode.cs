@@ -111,6 +111,10 @@ namespace JBWRegex.RegularExpressions {
         internal const int Testref    = 33;                   //          (?(n) | )
         internal const int Testgroup  = 34;                   //          (?(...) | )
 
+        internal const int JbwSet = RegexCode.JbwSet;
+        internal const int JbwSetloop = RegexCode.JbwSetloop;
+        internal const int JbwSetlazy = RegexCode.JbwSetlazy;
+
         /*
          * RegexNode data members
          * 
@@ -121,6 +125,7 @@ namespace JBWRegex.RegularExpressions {
         internal List<RegexNode>      _children;
 
         internal String         _str;
+        internal List<string> _list;
         internal char           _ch;
         internal int            _m;
         internal int            _n;
@@ -143,6 +148,13 @@ namespace JBWRegex.RegularExpressions {
             _type = type;
             _options = options;
             _str = str;
+        }
+
+        internal RegexNode(int type, RegexOptions options, List<string> list)
+        {
+            _type = type;
+            _options = options;
+            _list = list;
         }
 
         internal RegexNode(int type, RegexOptions options, int m) {
@@ -540,6 +552,7 @@ namespace JBWRegex.RegularExpressions {
                 case RegexNode.One:
                 case RegexNode.Notone:
                 case RegexNode.Set:
+                case RegexNode.JbwSet:
 
                     MakeRep(lazy ? RegexNode.Onelazy : RegexNode.Oneloop, min, max);
                     return this;

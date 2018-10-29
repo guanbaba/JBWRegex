@@ -62,6 +62,15 @@ namespace JBWRegex.RegularExpressions
 
         internal const int Nothing        = 22;   //                          Reject!
 
+        internal const int JbwSetrep = 50;   //                          \[#¥ ”Ô1|¥ ”Ô2]{n}
+        internal const int JbwSetloop = 53;   //                          \[#¥ ”Ô1|¥ ”Ô2]{ ,n}
+        internal const int JbwSetlazy = 56;   //                          \[#¥ ”Ô1|¥ ”Ô2]{ ,n}?
+        internal const int JbwSet = 59;   //                          \[#¥ ”Ô1|¥ ”Ô2]
+        
+        
+
+
+
         // primitive control structures
 
         internal const int Lazybranch     = 23;   // back     jump            straight first
@@ -99,6 +108,7 @@ namespace JBWRegex.RegularExpressions
 
         internal int[]           _codes;                 // the code
         internal String[]        _strings;               // the string/set table
+        internal List<List<string>> _lists;
         // not used! internal int[]           _sparseIndex;           // a list of the groups that are used
         internal int             _trackcount;            // how many instructions use backtracking
 #if SILVERLIGHT
@@ -116,7 +126,7 @@ namespace JBWRegex.RegularExpressions
 
         // constructor
 
-        internal RegexCode(int [] codes, List<String> stringlist, int trackcount,
+        internal RegexCode(int [] codes, List<String> stringlist, List<List<string>> lists, int trackcount,
 #if SILVERLIGHT
                            Dictionary<Int32, Int32> caps, int capsize,
 #else
@@ -134,6 +144,7 @@ namespace JBWRegex.RegularExpressions
             _anchors = anchors;
             _rightToLeft = rightToLeft;
             stringlist.CopyTo(0, _strings, 0, stringlist.Count);
+            _lists = lists;
         }
 
         internal static bool OpcodeBacktracks(int Op) {

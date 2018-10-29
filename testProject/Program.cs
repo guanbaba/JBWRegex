@@ -15,9 +15,10 @@ namespace testProject
             wordList.Add(new Word() { word = "这", pos = "r" });
             wordList.Add(new Word() { word = "本", pos = "q" });
             wordList.Add(new Word() { word = "有趣", pos = "a" });
+            wordList.Add(new Word() { word = "有意思", pos = "a" });
             wordList.Add(new Word() { word = "的", pos = "u" });
             wordList.Add(new Word() { word = "书", pos = "n" });
-            Regex re = new Regex(@"^(?:(?<att>[rm]m?q?|[antrv]f?的?)*([ntr])(?<ff>f)?|(?<att>.的)(.)|(.)(?<un>u))$");
+            Regex re = new Regex(@"^(?:rq([#有趣|有意思])+的n)$");
             Match match = re.Match(wordList);
             Console.WriteLine(match.Success);
             if (match.Success)

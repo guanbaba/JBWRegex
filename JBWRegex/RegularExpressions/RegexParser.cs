@@ -285,7 +285,12 @@ namespace JBWRegex.RegularExpressions
                         goto ContinueOuterScan;
 
                     case '[':
-                        AddUnitSet(ScanCharClass(UseOptionI()).ToStringClass());
+                        if (RightChar() != '#')
+                            AddUnitSet(ScanCharClass(UseOptionI()).ToStringClass());
+                        else
+                        {
+                            AddUnitJbwSet(ScanWordClass());
+                        }
                         break;
 
                     case '(': {
@@ -639,6 +644,33 @@ namespace JBWRegex.RegularExpressions
                 cc.AddLowercase(_culture);
             
             return cc;
+        }
+
+
+        internal List<string> ScanWordClass()
+        {
+            List<string> list = new List<string>();
+            char ch;
+            MoveRight();
+            int start = Textpos();
+            int end = Textpos();
+            while (']' != (ch = RightChar()))
+            {
+                if (ch == '|')
+                {
+                    end = Textpos();
+                    if (end > start)
+                    {
+                        list.Add(_pattern.Substring(start, end - start));
+                        start = Textpos() + 1;
+                        end = start;
+                    }
+                }
+                MoveRight();
+            }
+            list.Add(_pattern.Substring(start, Textpos() - start));
+            MoveRight();
+            return list;
         }
 
         /*
@@ -2021,6 +2053,11 @@ namespace JBWRegex.RegularExpressions
          */
         internal void AddUnitSet(string cc) {
             _unit = new RegexNode(RegexNode.Set, _options, cc);
+        }
+
+        internal void AddUnitJbwSet(List<string> list)
+        {
+            _unit = new RegexNode(RegexNode.JbwSet, _options, list);
         }
 
         /*

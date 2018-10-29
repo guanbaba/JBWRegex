@@ -30,6 +30,7 @@ namespace JBWRegex.RegularExpressions
         internal int         _curpos;
         internal Dictionary<string, int>   _stringhash;
         internal List<String> _stringtable;
+        internal List<List<string>> _stringlists;
         // not used! internal int         _stringcount;
         internal bool     _counting;
         internal int         _count;
@@ -67,6 +68,7 @@ namespace JBWRegex.RegularExpressions
             _emitted = new int[32];
             _stringhash = new Dictionary<string, int>();
             _stringtable = new List<String>();
+            _stringlists = new List<List<string>>();
         }
 
         /*
@@ -180,6 +182,16 @@ namespace JBWRegex.RegularExpressions
                 _stringtable.Add(str);
             }
 
+            return i;
+        }
+
+        internal int ListCode(List<string> list)
+        {
+            Int32 i;
+            if(_counting)
+                return 0;
+            i = _stringlists.Count;
+            _stringlists.Add(list);
             return i;
         }
 
@@ -300,7 +312,7 @@ namespace JBWRegex.RegularExpressions
 
             anchors = RegexFCD.Anchors(tree);
 
-            return new RegexCode(_emitted, _stringtable, _trackcount, _caps, capsize, bmPrefix, fcPrefix, anchors, rtl);
+            return new RegexCode(_emitted, _stringtable, _stringlists, _trackcount, _caps, capsize, bmPrefix, fcPrefix, anchors, rtl);
         }
 
         /*
@@ -520,12 +532,25 @@ namespace JBWRegex.RegularExpressions
                              (node._n == Int32.MaxValue) ? Int32.MaxValue : node._n - node._m);
                     break;
 
+                case RegexNode.JbwSetloop:
+                case RegexNode.JbwSetlazy:
+                    if (node._m > 0)
+                        Emit(RegexCode.JbwSetrep | bits, ListCode(node._list), node._m);
+                    if (node._n > node._m)
+                        Emit(node._type | bits, ListCode(node._list), 
+                             (node._n == Int32.MaxValue) ? Int32.MaxValue : node._n - node._m);
+                    break;
+
                 case RegexNode.Multi:
                     Emit(node._type | bits, StringCode(node._str));
                     break;
 
                 case RegexNode.Set:
                     Emit(node._type | bits, StringCode(node._str));
+                    break;
+
+                case RegexNode.JbwSet:
+                    Emit(node._type | bits, ListCode(node._list));
                     break;
 
                 case RegexNode.Ref:

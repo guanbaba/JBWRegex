@@ -16,12 +16,14 @@ namespace JBWRegex.RegularExpressions
     using System.Collections;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Collections.Generic;
         
     internal sealed class RegexInterpreter : RegexRunner {
         internal int runoperator;
         internal int [] runcodes;
         internal int runcodepos;
         internal String [] runstrings;
+        internal List<List<string>> runlists;
         internal RegexCode runcode;
         internal RegexPrefix runfcPrefix;
         internal RegexBoyerMoore runbmPrefix;
@@ -34,6 +36,7 @@ namespace JBWRegex.RegularExpressions
             runcode       = code;
             runcodes      = code._codes;
             runstrings    = code._strings;
+            runlists      = code._lists;
             runfcPrefix   = code._fcPrefix;
             runbmPrefix   = code._bmPrefix;
             runanchors    = code._anchors;
@@ -1668,6 +1671,21 @@ namespace JBWRegex.RegularExpressions
                         Advance(1);
                         continue;
 
+                    case RegexCode.JbwSet:
+                        if (Forwardchars() < 1)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            w = Forwardwordnext();
+                            if (!runlists[Operand(0)].Contains(w.word))  //*
+                                break;
+                        }
+
+                        Advance(1);
+                        continue;
+
                     case RegexCode.Multi:       //两位操作码
                         {
                             if (!Wordsmatch(runstrings[Operand(0)]))   //*
@@ -1756,6 +1774,26 @@ namespace JBWRegex.RegularExpressions
                             continue;
                         }
 
+                    case RegexCode.JbwSetrep:  //三位操作码
+                        {
+                            int c = Operand(1);     //获取重复次数
+
+                            if (Forwardchars() < c)     //剩余字符数小于重复次数
+                                break;
+
+                            List<string> list = runlists[Operand(0)];    //获取集合的特殊表示字符串
+
+                            while (c-- > 0)
+                            {
+                                w = Forwardwordnext();
+                                if (!list.Contains(w.word))    //*
+                                    goto BreakBackward;
+                            }
+
+                            Advance(2);     //操作码向前两位
+                            continue;
+                        }
+
                     case RegexCode.Oneloop:     //三位操作码
                         {
                             int c = Operand(1);     //获取最大重复次数
@@ -1837,6 +1875,33 @@ namespace JBWRegex.RegularExpressions
                             continue;
                         }
 
+                    case RegexCode.JbwSetloop:     //三位操作码
+                        {
+                            int c = Operand(1);
+
+                            if (c > Forwardchars())
+                                c = Forwardchars();
+
+                            List<string> list = runlists[Operand(0)];
+                            int i;
+
+                            for (i = c; i > 0; i--)
+                            {
+                                w = Forwardwordnext();
+                                if (!list.Contains(w.word))
+                                {  //*
+                                    Backwardnext();
+                                    break;
+                                }
+                            }
+
+                            if (c > i)
+                                TrackPush(c - i - 1, Textpos() - Bump());
+
+                            Advance(2);
+                            continue;
+                        }
+
                     case RegexCode.Oneloop | RegexCode.Back:
                     case RegexCode.Notoneloop | RegexCode.Back:
                         {
@@ -1884,6 +1949,20 @@ namespace JBWRegex.RegularExpressions
                         }
 
                     case RegexCode.Setlazy:     //三位操作码
+                        {
+                            int c = Operand(1);
+
+                            if (c > Forwardchars())
+                                c = Forwardchars();
+
+                            if (c > 0)
+                                TrackPush(c - 1, Textpos());    //不匹配
+
+                            Advance(2);
+                            continue;
+                        }
+
+                    case RegexCode.JbwSetlazy:     //三位操作码
                         {
                             int c = Operand(1);
 
