@@ -34,8 +34,9 @@ namespace JBWRegex.RegularExpressions
 
             _rep = rep;
 
-            //if (concat.Type() != RegexNode.Concatenate)
-            //    throw new ArgumentException(SR.GetString(SR.ReplacementError));
+            if (concat.Type() != RegexNode.Concatenate)
+                //    throw new ArgumentException(SR.GetString(SR.ReplacementError));
+                throw new ArgumentException();
 
             sb = new StringBuilder();
             strings = new List<String>();
@@ -64,8 +65,9 @@ namespace JBWRegex.RegularExpressions
 
                         rules.Add(-Specials - 1 - slot);
                         break;
-                    //default:
+                    default:
                     //    throw new ArgumentException(SR.GetString(SR.ReplacementError));
+                        throw new ArgumentException();
                 }
             }
 
@@ -188,10 +190,12 @@ namespace JBWRegex.RegularExpressions
         internal String Replace(Regex regex, String input, int count, int startat) {
             Match match;
 
-            //if (count < -1)
-            //    throw new ArgumentOutOfRangeException("count", SR.GetString(SR.CountTooSmall));
-            //if (startat < 0 || startat > input.Length) 
-            //    throw new ArgumentOutOfRangeException("startat", SR.GetString(SR.BeginIndexNotNegative));
+            if (count < -1)
+                //    throw new ArgumentOutOfRangeException("count", SR.GetString(SR.CountTooSmall));
+                throw new ArgumentOutOfRangeException();
+            if (startat < 0 || startat > input.Length)
+                //    throw new ArgumentOutOfRangeException("startat", SR.GetString(SR.BeginIndexNotNegative));
+                throw new ArgumentOutOfRangeException();
 
             if (count == 0)
                 return input;
@@ -267,10 +271,12 @@ namespace JBWRegex.RegularExpressions
 
             if (evaluator == null)
                 throw new ArgumentNullException("evaluator");
-            //if (count < -1)
-            //    throw new ArgumentOutOfRangeException("count", SR.GetString(SR.CountTooSmall));
-            //if (startat < 0 || startat > input.Length)
-            //    throw new ArgumentOutOfRangeException("startat", SR.GetString(SR.BeginIndexNotNegative));
+            if (count < -1)
+                //    throw new ArgumentOutOfRangeException("count", SR.GetString(SR.CountTooSmall));
+                throw new ArgumentOutOfRangeException();
+            if (startat < 0 || startat > input.Length)
+                //    throw new ArgumentOutOfRangeException("startat", SR.GetString(SR.BeginIndexNotNegative));
+                throw new ArgumentOutOfRangeException();
 
             if (count == 0)
                 return input;
@@ -344,11 +350,13 @@ namespace JBWRegex.RegularExpressions
             Match match;
             String[] result;
 
-            //if (count < 0)
-            //    throw new ArgumentOutOfRangeException("count", SR.GetString(SR.CountTooSmall));
+            if (count < 0)
+                //    throw new ArgumentOutOfRangeException("count", SR.GetString(SR.CountTooSmall));
+                throw new ArgumentOutOfRangeException();
 
-            //if (startat < 0 || startat > input.Length) 
-            //    throw new ArgumentOutOfRangeException("startat", SR.GetString(SR.BeginIndexNotNegative));
+            if (startat < 0 || startat > input.Length)
+                //    throw new ArgumentOutOfRangeException("startat", SR.GetString(SR.BeginIndexNotNegative));
+                throw new ArgumentOutOfRangeException();
                 
             if (count == 1) {
                 result = new String[1];

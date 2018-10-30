@@ -195,8 +195,9 @@ namespace JBWRegex.RegularExpressions
             if (replacement == null)
                 throw new ArgumentNullException("replacement");
 
-            //if (_regex == null)
-               // throw new NotSupportedException(SR.GetString(SR.NoResultOnFailed));
+            if (_regex == null)
+                // throw new NotSupportedException(SR.GetString(SR.NoResultOnFailed));
+                throw new NotSupportedException();
 
             repl = (RegexReplacement)_regex.replref.Get();
 

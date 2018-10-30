@@ -313,8 +313,9 @@ namespace JBWRegex.RegularExpressions
                         goto ContinueOuterScan;
 
                     case ')':
-                        //if (EmptyStack())
+                        if (EmptyStack())
                             //throw MakeException(SR.GetString(SR.TooManyParens));
+                            throw MakeException("Stack is empty.");
 
                         AddGroup();
                         PopGroup();
@@ -347,16 +348,17 @@ namespace JBWRegex.RegularExpressions
                     case '*':
                     case '+':
                     case '?':
-                       // if (Unit() == null)
+                        if (Unit() == null)
                          //   throw MakeException(wasPrevQuantifier ?
                                               //  SR.GetString(SR.NestedQuantify, ch.ToString()) :
                                              //   SR.GetString(SR.QuantifyAfterNothing));
+                            throw MakeException("Unit is null.");
                         MoveLeft();
                         break;
 
                     default:
-                        break;
-                       // throw MakeException(SR.GetString(SR.InternalError));
+                    // throw MakeException(SR.GetString(SR.InternalError));
+                         throw MakeException("Default case.");
                 }
 
                 ScanBlank();
@@ -413,8 +415,8 @@ namespace JBWRegex.RegularExpressions
                             break;
 
                         default:
-                            break;
-                            //throw MakeException(SR.GetString(SR.InternalError));
+                        //throw MakeException(SR.GetString(SR.InternalError));
+                            throw MakeException("Default case.");
                     }
 
                     ScanBlank();
@@ -426,8 +428,9 @@ namespace JBWRegex.RegularExpressions
                         lazy = true;
                     }
 
-                    //if (min > max)
-                     //   throw MakeException(SR.GetString(SR.IllegalRange));
+                    if (min > max)
+                        //   throw MakeException(SR.GetString(SR.IllegalRange));
+                        throw MakeException("min>max");
 
                     AddConcatenate(lazy, min, max);
                 }
@@ -439,8 +442,9 @@ namespace JBWRegex.RegularExpressions
             BreakOuterScan: 
             ;
 
-            //if (!EmptyStack())
-               // throw MakeException(SR.GetString(SR.NotEnoughParens));
+            if (!EmptyStack())
+                // throw MakeException(SR.GetString(SR.NotEnoughParens));
+                throw MakeException("Stack is not empty.");
 
             AddGroup();
 
@@ -524,8 +528,9 @@ namespace JBWRegex.RegularExpressions
                         case 'D':
                         case 'd':
                             if (!scanOnly) {
-                                //if (inRange)
-                                   // throw MakeException(SR.GetString(SR.BadClassInCharRange, ch.ToString()));
+                                if (inRange)
+                                    // throw MakeException(SR.GetString(SR.BadClassInCharRange, ch.ToString()));
+                                    throw MakeException("inRange");
                                 cc.AddDigit(UseOptionE(), ch == 'D', _pattern);
                             }
                             continue;
@@ -533,8 +538,9 @@ namespace JBWRegex.RegularExpressions
                         case 'S':
                         case 's':
                             if (!scanOnly) {
-                                //if (inRange)
-                                   // throw MakeException(SR.GetString(SR.BadClassInCharRange, ch.ToString()));
+                                if (inRange)
+                                    // throw MakeException(SR.GetString(SR.BadClassInCharRange, ch.ToString()));
+                                    throw MakeException("inRange");
                                 cc.AddSpace(UseOptionE(), ch == 'S');
                             }
                             continue;
@@ -542,8 +548,9 @@ namespace JBWRegex.RegularExpressions
                         case 'W':
                         case 'w':
                             if (!scanOnly) {
-                                //if (inRange)
-                                   // throw MakeException(SR.GetString(SR.BadClassInCharRange, ch.ToString()));
+                                if (inRange)
+                                    // throw MakeException(SR.GetString(SR.BadClassInCharRange, ch.ToString()));
+                                    throw MakeException("inRange");
 
                                 cc.AddWord(UseOptionE(), ch == 'W');
                             }
@@ -552,8 +559,9 @@ namespace JBWRegex.RegularExpressions
                         case 'p':
                         case 'P':
                             if (!scanOnly) {
-                                //if (inRange)
-                                  //  throw MakeException(SR.GetString(SR.BadClassInCharRange, ch.ToString()));
+                                if (inRange)
+                                    //  throw MakeException(SR.GetString(SR.BadClassInCharRange, ch.ToString()));
+                                    throw MakeException("inRange");
                                 cc.AddCategoryFromName(ParseProperty(), (ch != 'p'), caseInsensitive, _pattern);
                             }
                             else 
@@ -599,13 +607,15 @@ namespace JBWRegex.RegularExpressions
                             cc.AddChar(chPrev);
                             cc.AddSubtraction(ScanCharClass(caseInsensitive, false));
 
-                            //if (CharsRight() > 0 && RightChar() != ']')
+                            if (CharsRight() > 0 && RightChar() != ']')
                             //    throw MakeException(SR.GetString(SR.SubtractionMustBeLast));
+                                throw MakeException("right char is not ]");
                         } 
                         else {
                             // a regular range, like a-z
-                            //if (chPrev > ch)
-                              //  throw MakeException(SR.GetString(SR.ReversedCharRange));
+                            if (chPrev > ch)
+                                //  throw MakeException(SR.GetString(SR.ReversedCharRange));
+                                throw MakeException("chPrev > ch");
                             cc.AddRange(chPrev, ch);
                         }
                     }
@@ -623,8 +633,9 @@ namespace JBWRegex.RegularExpressions
                         MoveRight(1);
                         cc.AddSubtraction(ScanCharClass(caseInsensitive, false));
 
-                        //if (CharsRight() > 0 && RightChar() != ']')
+                        if (CharsRight() > 0 && RightChar() != ']')
                         //    throw MakeException(SR.GetString(SR.SubtractionMustBeLast));
+                            throw MakeException("right char is not ]");
                     }
                     else {
                         MoveRight(1);
@@ -637,8 +648,9 @@ namespace JBWRegex.RegularExpressions
                 }
             }
 
-            //if (!closed)
-            //    throw MakeException(SR.GetString(SR.UnterminatedBracket));
+            if (!closed)
+                //    throw MakeException(SR.GetString(SR.UnterminatedBracket));
+                throw MakeException("Not closed");
 
             if (!scanOnly && caseInsensitive)
                 cc.AddLowercase(_culture);
@@ -763,10 +775,12 @@ namespace JBWRegex.RegularExpressions
                                         capnum = -1;
 
                                     // check if we have bogus characters after the number
-                                    //if (CharsRight() > 0 && !(RightChar() == close || RightChar() == '-'))
+                                    if (CharsRight() > 0 && !(RightChar() == close || RightChar() == '-'))
                                     //    throw MakeException(SR.GetString(SR.InvalidGroupName));
-                                    //if (capnum == 0)
+                                        throw MakeException("have bogus characters after the number.");
+                                    if (capnum == 0)
                                     //    throw MakeException(SR.GetString(SR.CapnumNotZero));
+                                        throw MakeException("capnum is zero");
                                 }
                                 else if (RegexCharClass.IsWordChar(ch)) {
                                     String capname = ScanCapname();
@@ -775,8 +789,9 @@ namespace JBWRegex.RegularExpressions
                                         capnum = CaptureSlotFromName(capname);
 
                                     // check if we have bogus character after the name
-                                    //if (CharsRight() > 0 && !(RightChar() == close || RightChar() == '-'))
+                                    if (CharsRight() > 0 && !(RightChar() == close || RightChar() == '-'))
                                     //    throw MakeException(SR.GetString(SR.InvalidGroupName));
+                                        throw MakeException("have bogus characters after the name.");
                                 }
                                 else if (ch == '-') {
                                     proceed = true;
@@ -784,6 +799,7 @@ namespace JBWRegex.RegularExpressions
                                 else {
                                     // bad group name - starts with something other than a word character and isn't a number
                                     //throw MakeException(SR.GetString(SR.InvalidGroupName));
+                                    throw MakeException("bad group name");
                                 }
 
                                 // grab part after - if any
@@ -795,28 +811,33 @@ namespace JBWRegex.RegularExpressions
                                     if (ch >= '0' && ch <= '9') {
                                         uncapnum = ScanDecimal();
                                         
-                                        //if (!IsCaptureSlot(uncapnum))
+                                        if (!IsCaptureSlot(uncapnum))
                                         //    throw MakeException(SR.GetString(SR.UndefinedBackref, uncapnum));
+                                            throw MakeException("not capture slot");
                                         
                                         //// check if we have bogus characters after the number
-                                        //if (CharsRight() > 0 && RightChar() != close)
+                                        if (CharsRight() > 0 && RightChar() != close)
                                         //    throw MakeException(SR.GetString(SR.InvalidGroupName));
+                                            throw MakeException("have bogus characters after the number");
                                     }
                                     else if (RegexCharClass.IsWordChar(ch)) {
                                         String uncapname = ScanCapname();
 
                                         if (IsCaptureName(uncapname))
                                             uncapnum = CaptureSlotFromName(uncapname);
-                                        //else
+                                        else
                                         //    throw MakeException(SR.GetString(SR.UndefinedNameRef, uncapname));
+                                            throw MakeException("not capture name");
 
                                         // check if we have bogus character after the name
-                                        //if (CharsRight() > 0 && RightChar() != close)
+                                        if (CharsRight() > 0 && RightChar() != close)
                                         //    throw MakeException(SR.GetString(SR.InvalidGroupName));
+                                            throw MakeException("have bogus character after the name");
                                     }
                                     else {
                                         // bad group name - starts with something other than a word character and isn't a number
                                         //throw MakeException(SR.GetString(SR.InvalidGroupName));
+                                        throw MakeException("bad group name");
                                     }
                                 }
 
@@ -843,11 +864,13 @@ namespace JBWRegex.RegularExpressions
                                 if (CharsRight() > 0 && MoveRightGetChar() == ')') {
                                     if (IsCaptureSlot(capnum))
                                         return new RegexNode(RegexNode.Testref, _options, capnum);
-                                    //else
+                                    else
                                     //    throw MakeException(SR.GetString(SR.UndefinedReference, capnum.ToString(CultureInfo.CurrentCulture)));
+                                        throw MakeException("not capture slot");
                                 }
-                                //else
+                                else
                                 //    throw MakeException(SR.GetString(SR.MalformedReference, capnum.ToString(CultureInfo.CurrentCulture)));
+                                    throw MakeException("right char is not )");
     
                             }
                             else if (RegexCharClass.IsWordChar(ch)) {
@@ -866,16 +889,19 @@ namespace JBWRegex.RegularExpressions
                         if (charsRight >= 3 && RightChar(1) == '?') {
                             char rightchar2 = RightChar(2);
                             // disallow comments in the condition
-                            //if (rightchar2 == '#')
+                            if (rightchar2 == '#')
                             //    throw MakeException(SR.GetString(SR.AlternationCantHaveComment));
+                                throw MakeException("rightchar2 is #");
 
                             //// disallow named capture group (?<..>..) in the condition
-                            //if (rightchar2 == '\'' ) 
+                            if (rightchar2 == '\'' ) 
                             //    throw MakeException(SR.GetString(SR.AlternationCantCapture));
-                            //else {
-                            //    if (charsRight >=4 && (rightchar2 == '<' && RightChar(3) != '!' && RightChar(3) != '='))
-                            //        throw MakeException(SR.GetString(SR.AlternationCantCapture));
-                            //}
+                                throw MakeException("rightchar2 is \\");
+                            else {
+                                if (charsRight >=4 && (rightchar2 == '<' && RightChar(3) != '!' && RightChar(3) != '='))
+                                    //throw MakeException(SR.GetString(SR.AlternationCantCapture));
+                                    throw MakeException("something wrong with rightchar2");
+                            }
                         }
                             
                         break;
@@ -905,7 +931,7 @@ namespace JBWRegex.RegularExpressions
             // break Recognize comes here
 
             //throw MakeException(SR.GetString(SR.UnrecognizedGrouping));
-            return null;
+            throw MakeException("have not returned");
         }
 
         /*
@@ -928,8 +954,9 @@ namespace JBWRegex.RegularExpressions
                              RightChar(1) == '?' && RightChar() == '(') {
                         while (CharsRight() > 0 && RightChar() != ')')
                             MoveRight();
-                        //if (CharsRight() == 0)
-                        //    throw MakeException(SR.GetString(SR.UnterminatedComment));
+                        if (CharsRight() == 0)
+                            //    throw MakeException(SR.GetString(SR.UnterminatedComment));
+                            throw MakeException("no char on the right");
                         MoveRight();
                     }
                     else
@@ -944,8 +971,9 @@ namespace JBWRegex.RegularExpressions
 
                     while (CharsRight() > 0 && RightChar() != ')')
                         MoveRight();
-                    //if (CharsRight() == 0)
-                    //    throw MakeException(SR.GetString(SR.UnterminatedComment));
+                    if (CharsRight() == 0)
+                        //    throw MakeException(SR.GetString(SR.UnterminatedComment));
+                        throw MakeException("no char on the right");
                     MoveRight();
                 }
             }
@@ -959,8 +987,9 @@ namespace JBWRegex.RegularExpressions
             char ch;
             RegexCharClass cc;
 
-            //if (CharsRight() == 0)
-            //    throw MakeException(SR.GetString(SR.IllegalEndEscape));
+            if (CharsRight() == 0)
+                //    throw MakeException(SR.GetString(SR.IllegalEndEscape));
+                throw MakeException("no char on the right");
 
             switch (ch = RightChar()) {
                 case 'b':
@@ -1027,8 +1056,9 @@ namespace JBWRegex.RegularExpressions
          * Scans \-style backreferences and character escapes
          */
         internal RegexNode ScanBasicBackslash() {
-            //if (CharsRight() == 0)
+            if (CharsRight() == 0)
             //    throw MakeException(SR.GetString(SR.IllegalEndEscape));
+                throw MakeException("no char on the right");
 
             char ch;
             bool angled = false;
@@ -1051,8 +1081,9 @@ namespace JBWRegex.RegularExpressions
                     }
                 }
 
-                //if (!angled || CharsRight() <= 0)
-                //    throw MakeException(SR.GetString(SR.MalformedNameRef));
+                if (!angled || CharsRight() <= 0)
+                    //    throw MakeException(SR.GetString(SR.MalformedNameRef));
+                    throw MakeException("no char on the right");
 
                 ch = RightChar();
             }
@@ -1075,8 +1106,9 @@ namespace JBWRegex.RegularExpressions
                 if (CharsRight() > 0 && MoveRightGetChar() == close) {
                     if (IsCaptureSlot(capnum))
                         return new RegexNode(RegexNode.Ref, _options, capnum);
-                    //else
+                    else
                     //    throw MakeException(SR.GetString(SR.UndefinedBackref, capnum.ToString(CultureInfo.CurrentCulture)));
+                        throw MakeException("is not capture slot");
                 }
             }
 
@@ -1103,8 +1135,9 @@ namespace JBWRegex.RegularExpressions
                   int capnum = ScanDecimal();
                   if (IsCaptureSlot(capnum))
                       return new RegexNode(RegexNode.Ref, _options, capnum);
-                  //else if (capnum <= 9)
+                  else if (capnum <= 9)
                   //    throw MakeException(SR.GetString(SR.UndefinedBackref, capnum.ToString(CultureInfo.CurrentCulture)));
+                      throw MakeException("capnum <=9");
                 }
             }
 
@@ -1114,8 +1147,9 @@ namespace JBWRegex.RegularExpressions
                 if (CharsRight() > 0 && MoveRightGetChar() == close) {
                     if (IsCaptureName(capname))
                         return new RegexNode(RegexNode.Ref, _options, CaptureSlotFromName(capname));
-                    //else
+                    else
                     //    throw MakeException(SR.GetString(SR.UndefinedNameRef, capname));
+                        throw MakeException("is not capture name");
                 }
             }
 
@@ -1167,8 +1201,9 @@ namespace JBWRegex.RegularExpressions
 
                     while (CharsRight() > 0 && (ch = RightChar()) >= '0' && ch <= '9') {
                         int digit = (int)(ch - '0');
-                        //if (newcapnum > (MaxValueDiv10) || (newcapnum == (MaxValueDiv10) && digit > (MaxValueMod10)))
-                        //    throw MakeException(SR.GetString(SR.CaptureGroupOutOfRange));
+                        if (newcapnum > (MaxValueDiv10) || (newcapnum == (MaxValueDiv10) && digit > (MaxValueMod10)))
+                            //    throw MakeException(SR.GetString(SR.CaptureGroupOutOfRange));
+                            throw MakeException("capturegroup out of range");
 
                         newcapnum = newcapnum * 10 + digit;
 
@@ -1297,8 +1332,9 @@ namespace JBWRegex.RegularExpressions
             while (CharsRight() > 0 && (uint)(d = (char)(RightChar() - '0')) <= 9) {
                 MoveRight();
 
-                //if (i > (MaxValueDiv10) || (i == (MaxValueDiv10) && d > (MaxValueMod10)))
-                //    throw MakeException(SR.GetString(SR.CaptureGroupOutOfRange));
+                if (i > (MaxValueDiv10) || (i == (MaxValueDiv10) && d > (MaxValueMod10)))
+                    //    throw MakeException(SR.GetString(SR.CaptureGroupOutOfRange));
+                    throw MakeException("capturegroup out of range");
 
                 i *= 10;
                 i += d;
@@ -1323,8 +1359,9 @@ namespace JBWRegex.RegularExpressions
                 }
             }
 
-            //if (c > 0)
-            //    throw MakeException(SR.GetString(SR.TooFewHex));
+            if (c > 0)
+                //    throw MakeException(SR.GetString(SR.TooFewHex));
+                throw MakeException("c > 0");
 
             return(char)i;
         }
@@ -1353,8 +1390,9 @@ namespace JBWRegex.RegularExpressions
         internal char ScanControl() {
             char ch;
 
-            //if (CharsRight() <= 0)
-            //    throw MakeException(SR.GetString(SR.MissingControl));
+            if (CharsRight() <= 0)
+                //    throw MakeException(SR.GetString(SR.MissingControl));
+                throw MakeException("no char on the right");
 
             ch = MoveRightGetChar();
 
@@ -1367,7 +1405,7 @@ namespace JBWRegex.RegularExpressions
                 return ch;
 
             //throw MakeException(SR.GetString(SR.UnrecognizedControl));
-            return ' ';
+            throw MakeException("have not returned");
         }
 
         /*
@@ -1450,8 +1488,9 @@ namespace JBWRegex.RegularExpressions
                 case 'c':
                     return ScanControl();
                 default:
-                    //if (!UseOptionE() && RegexCharClass.IsWordChar(ch))
-                    //    throw MakeException(SR.GetString(SR.UnrecognizedEscape, ch.ToString()));
+                    if (!UseOptionE() && RegexCharClass.IsWordChar(ch))
+                        //    throw MakeException(SR.GetString(SR.UnrecognizedEscape, ch.ToString()));
+                        throw MakeException("unrecognizedEscape");
                     return ch;
             }
         }
@@ -1460,13 +1499,16 @@ namespace JBWRegex.RegularExpressions
          * Scans X for \p{X} or \P{X}
          */
         internal String ParseProperty() {
-            //if (CharsRight() < 3) {
-            //    throw MakeException(SR.GetString(SR.IncompleteSlashP));
-            //}
+            if (CharsRight() < 3)
+            {
+                //throw MakeException(SR.GetString(SR.IncompleteSlashP));
+                throw MakeException("chars on the right is less than 3");
+            }
             char ch = MoveRightGetChar();
-            //if (ch != '{') {
-            //    throw MakeException(SR.GetString(SR.MalformedSlashP));
-            //}
+            if (ch != '{') {
+                //    throw MakeException(SR.GetString(SR.MalformedSlashP));
+                throw MakeException("char is not {");
+            }
             
             int startpos = Textpos();
             while (CharsRight() > 0) {
@@ -1478,8 +1520,9 @@ namespace JBWRegex.RegularExpressions
             }
             String capname = _pattern.Substring(startpos, Textpos() - startpos);
 
-            //if (CharsRight() == 0 || MoveRightGetChar() != '}')
-            //    throw MakeException(SR.GetString(SR.IncompleteSlashP));
+            if (CharsRight() == 0 || MoveRightGetChar() != '}')
+                //    throw MakeException(SR.GetString(SR.IncompleteSlashP));
+                throw MakeException("char on the right is not }");
 
             return capname;
         }
@@ -1597,8 +1640,9 @@ namespace JBWRegex.RegularExpressions
                                     ch = RightChar();
 
                                     if (ch != '0' && RegexCharClass.IsWordChar(ch)) {
-                                        //if (_ignoreNextParen) 
-                                        //    throw MakeException(SR.GetString(SR.AlternationCantCapture));
+                                        if (_ignoreNextParen)
+                                            //    throw MakeException(SR.GetString(SR.AlternationCantCapture));
+                                            throw MakeException("alternation cant capture");
                                         if (ch >= '1' && ch <= '9') 
                                             NoteCaptureSlot(ScanDecimal(), pos);
                                         else 
@@ -1963,8 +2007,9 @@ namespace JBWRegex.RegularExpressions
 
             // The first () inside a Testgroup group goes directly to the group
             if (_group.Type() == RegexNode.Testgroup && _group.ChildCount() == 0) {
-                //if (_unit == null)
-                //    throw MakeException(SR.GetString(SR.IllegalCondition));
+                if (_unit == null)
+                    //    throw MakeException(SR.GetString(SR.IllegalCondition));
+                    throw MakeException("unit is null");
 
                 _group.AddChild(_unit);
                 _unit = null;
@@ -2081,8 +2126,9 @@ namespace JBWRegex.RegularExpressions
             if (_group.Type() == RegexNode.Testgroup || _group.Type() == RegexNode.Testref) {
                 _group.AddChild(_concatenation.ReverseLeft());
 
-                //if (_group.Type() == RegexNode.Testref && _group.ChildCount() > 2 || _group.ChildCount() > 3)
+                if (_group.Type() == RegexNode.Testref && _group.ChildCount() > 2 || _group.ChildCount() > 3)
                 //    throw MakeException(SR.GetString(SR.TooManyAlternates));
+                    throw MakeException("too many alternates");
             }
             else {
                 _alternation.AddChild(_concatenation.ReverseLeft());
@@ -2126,7 +2172,7 @@ namespace JBWRegex.RegularExpressions
          */
         internal ArgumentException MakeException(String message) {
            // return new ArgumentException(SR.GetString(SR.MakeException, _pattern, message));
-            return new ArgumentException();
+            return new ArgumentException(message);
         }
 
         /*

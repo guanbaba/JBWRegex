@@ -49,8 +49,9 @@ namespace JBWRegex.RegularExpressions
          * Nonpublic constructor
          */
         internal MatchCollection(Regex regex, String input, int beginning, int length, int startat) {
-           // if (startat < 0 || startat > input.Length)
-             //   throw new ArgumentOutOfRangeException("startat", SR.GetString(SR.BeginIndexNotNegative));
+            if (startat < 0 || startat > input.Length)
+                //   throw new ArgumentOutOfRangeException("startat", SR.GetString(SR.BeginIndexNotNegative));
+                throw new ArgumentOutOfRangeException();
 
             _regex = regex;
             _input = input;
@@ -168,7 +169,8 @@ namespace JBWRegex.RegularExpressions
         public void CopyTo(Array array, int arrayIndex) {
             if ((array != null) && (array.Rank != 1))
             {
-             //   throw new ArgumentException(SR.GetString(SR.Arg_RankMultiDimNotSupported));
+                //   throw new ArgumentException(SR.GetString(SR.Arg_RankMultiDimNotSupported));
+                throw new ArgumentException();
             }
 
             // property access to force computation of whole array
@@ -188,7 +190,8 @@ namespace JBWRegex.RegularExpressions
                 if (CompatibilitySwitches.IsAppEarlierThanWindowsPhone8)
                     throw;
 #endif
-             //   throw new ArgumentException(SR.GetString(SR.Arg_InvalidArrayType), ex);
+                //   throw new ArgumentException(SR.GetString(SR.Arg_InvalidArrayType), ex);
+                throw new ArgumentException();
             }
         }
 
@@ -245,8 +248,9 @@ namespace JBWRegex.RegularExpressions
          */
         public Object Current {
             get { 
-                //if (_match == null)
-                //    throw new InvalidOperationException(SR.GetString(SR.EnumNotStarted));
+                if (_match == null)
+                    //    throw new InvalidOperationException(SR.GetString(SR.EnumNotStarted));
+                    throw new InvalidOperationException();
                 return _match;
             }
         }

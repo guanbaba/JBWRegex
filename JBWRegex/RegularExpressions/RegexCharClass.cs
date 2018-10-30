@@ -1172,8 +1172,7 @@ namespace JBWRegex.RegularExpressions
                     }
                 }
             }
-            return "";
-           // throw new ArgumentException(SR.GetString(SR.MakeException, pattern, SR.GetString(SR.UnknownProperty, capname))); 
+           throw new ArgumentException(); 
         }
 
 #if DBG

@@ -18,7 +18,7 @@ namespace testProject
             wordList.Add(new Word() { word = "有意思", pos = "a" });
             wordList.Add(new Word() { word = "的", pos = "u" });
             wordList.Add(new Word() { word = "书", pos = "n" });
-            Regex re = new Regex(@"^(?:rq([#有趣|有意思])+的n)$");
+            Regex re = new Regex(@"^(?:([rq])+([#有趣|有意思|好看])+(的)([nrt]))$");
             Match match = re.Match(wordList);
             Console.WriteLine(match.Success);
             if (match.Success)
@@ -28,10 +28,10 @@ namespace testProject
                 Console.WriteLine(match.Index);
                 foreach (Group group in match.Groups)
                 {
-                    Console.WriteLine(group.Name+":");
+                    Console.WriteLine(group.Name + ":");
                     foreach (Capture cap in group.Captures)
                     {
-                        Console.WriteLine("索引："+cap.Index+" "+"长度："+cap.Length+" "+"词序列："+cap.Words);
+                        Console.WriteLine("索引：" + cap.Index + " " + "长度：" + cap.Length + " " + "词序列：" + cap.Words);
                     }
                     Console.WriteLine();
                 }

@@ -571,8 +571,9 @@ namespace JBWRegex.RegularExpressions
                     Emit(node._type);
                     break;
 
-                //default:
-                   // throw MakeException(SR.GetString(SR.UnexpectedOpcode, nodetype.ToString(CultureInfo.CurrentCulture)));
+                default:
+                // throw MakeException(SR.GetString(SR.UnexpectedOpcode, nodetype.ToString(CultureInfo.CurrentCulture)));
+                    throw MakeException("unexpected op code");
             }
         }
     }

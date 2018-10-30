@@ -209,8 +209,9 @@ namespace JBWRegex.RegularExpressions
          */
         public Capture Capture {
             get {
-                //if (_curindex < 0 || _curindex >= _rcc.Count)
-                //    throw new InvalidOperationException(SR.GetString(SR.EnumNotStarted));
+                if (_curindex < 0 || _curindex >= _rcc.Count)
+                    //    throw new InvalidOperationException(SR.GetString(SR.EnumNotStarted));
+                    throw new InvalidOperationException();
 
                 return _rcc[_curindex];
             }

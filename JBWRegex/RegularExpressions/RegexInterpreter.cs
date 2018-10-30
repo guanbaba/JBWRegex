@@ -1195,8 +1195,9 @@ namespace JBWRegex.RegularExpressions
                             continue;
                         }
 
-                    //default:
+                    default:
                     //    throw new NotImplementedException(SR.GetString(SR.UnimplementedState));
+                        throw new NotImplementedException();
                 }
 
             BreakBackward:
@@ -1679,7 +1680,7 @@ namespace JBWRegex.RegularExpressions
                         else
                         {
                             w = Forwardwordnext();
-                            if (!runlists[Operand(0)].Contains(w.word))  //*
+                            if (!runlists[Operand(0)].Contains(w.word) && !runlists[Operand(0)].Contains(w.pos))  //*
                                 break;
                         }
 
@@ -1786,7 +1787,7 @@ namespace JBWRegex.RegularExpressions
                             while (c-- > 0)
                             {
                                 w = Forwardwordnext();
-                                if (!list.Contains(w.word))    //*
+                                if (!list.Contains(w.word) && !list.Contains(w.pos))    //*
                                     goto BreakBackward;
                             }
 
@@ -1888,7 +1889,7 @@ namespace JBWRegex.RegularExpressions
                             for (i = c; i > 0; i--)
                             {
                                 w = Forwardwordnext();
-                                if (!list.Contains(w.word))
+                                if (!list.Contains(w.word) && !list.Contains(w.pos))
                                 {  //*
                                     Backwardnext();
                                     break;
@@ -2030,8 +2031,9 @@ namespace JBWRegex.RegularExpressions
                             continue;
                         }
 
-                    //default:
+                    default:
                     //    throw new NotImplementedException(SR.GetString(SR.UnimplementedState));
+                        throw new NotImplementedException();
                 }
 
             BreakBackward:

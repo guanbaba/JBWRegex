@@ -405,6 +405,7 @@ namespace JBWRegex.RegularExpressions {
                 #endif
 
                // throw new InvalidCastException(SR.GetString(SR.IllegalDefaultRegexMatchTimeoutInAppDomain, DefaultMatchTimeout_ConfigKeyName));
+                throw new InvalidCastException();
             }
 
             // Convert default value:
@@ -423,7 +424,8 @@ namespace JBWRegex.RegularExpressions {
                 System.Diagnostics.Debug.WriteLine(errMsg);
                 #endif
 
-               // throw new ArgumentOutOfRangeException(SR.GetString(SR.IllegalDefaultRegexMatchTimeoutInAppDomain, DefaultMatchTimeout_ConfigKeyName));
+                // throw new ArgumentOutOfRangeException(SR.GetString(SR.IllegalDefaultRegexMatchTimeoutInAppDomain, DefaultMatchTimeout_ConfigKeyName));
+                 throw new ArgumentOutOfRangeException();
             }
 
             // We are good:
@@ -851,7 +853,8 @@ namespace JBWRegex.RegularExpressions {
         ///       the precise result as a RegexMatch object.
         ///    </para>
         /// </devdoc>
-        public Match Match(String input) {
+        public Match Match(String input)
+        {
 
             if (input == null)
                 throw new ArgumentNullException("input");
@@ -862,7 +865,7 @@ namespace JBWRegex.RegularExpressions {
         {
 
             if (wordlist == null)
-                throw new ArgumentNullException("input");
+                throw new ArgumentNullException("wordlist");
 
             return Match(wordlist, UseOptionR() ? wordlist.Count : 0);
         }
@@ -1306,8 +1309,9 @@ namespace JBWRegex.RegularExpressions {
         /// <devdoc>
         /// </devdoc>
         protected void InitializeReferences() {
-           // if (refsInitialized)
-            //    throw new NotSupportedException(SR.GetString(SR.OnlyAllowedOnce));
+            if (refsInitialized)
+                //    throw new NotSupportedException(SR.GetString(SR.OnlyAllowedOnce));
+                throw new NotSupportedException();
             
             refsInitialized = true;
             runnerref  = new ExclusiveReference();
@@ -1321,12 +1325,14 @@ namespace JBWRegex.RegularExpressions {
         internal Match Run(bool quick, int prevlen, String input, int beginning, int length, int startat) {
             Match match;
             RegexRunner runner = null;
+            
+            if (startat < 0 || startat > input.Length)
+                //    throw new ArgumentOutOfRangeException("start", SR.GetString(SR.BeginIndexNotNegative));
+                throw new ArgumentOutOfRangeException();
 
-           // if (startat < 0 || startat > input.Length)
-          //      throw new ArgumentOutOfRangeException("start", SR.GetString(SR.BeginIndexNotNegative));
-
-           // if (length < 0 || length > input.Length)
-          //      throw new ArgumentOutOfRangeException("length", SR.GetString(SR.LengthNotNegative));
+            if (length < 0 || length > input.Length)
+                //      throw new ArgumentOutOfRangeException("length", SR.GetString(SR.LengthNotNegative));
+                throw new ArgumentOutOfRangeException();
 
             // There may be a cached runner; grab ownership of it if we can.
 
@@ -1363,11 +1369,13 @@ namespace JBWRegex.RegularExpressions {
             Match match;
             RegexRunner runner = null;
 
-            // if (startat < 0 || startat > input.Length)
-            //      throw new ArgumentOutOfRangeException("start", SR.GetString(SR.BeginIndexNotNegative));
+            if (startat < 0 || startat > wordList.Count)
+                //      throw new ArgumentOutOfRangeException("start", SR.GetString(SR.BeginIndexNotNegative));
+                throw new ArgumentOutOfRangeException();
 
-            // if (length < 0 || length > input.Length)
-            //      throw new ArgumentOutOfRangeException("length", SR.GetString(SR.LengthNotNegative));
+            if (length < 0 || length > wordList.Count)
+                //      throw new ArgumentOutOfRangeException("length", SR.GetString(SR.LengthNotNegative));
+                throw new ArgumentOutOfRangeException();
 
             // There may be a cached runner; grab ownership of it if we can.
 

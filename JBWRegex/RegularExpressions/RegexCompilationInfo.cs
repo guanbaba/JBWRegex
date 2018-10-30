@@ -89,7 +89,8 @@ namespace JBWRegex.RegularExpressions
                 }
 				
                 if (value.Length == 0) {
-              //  	throw new ArgumentException(SR.GetString(SR.InvalidNullEmptyArgument, "value"), "value");					
+                    //  	throw new ArgumentException(SR.GetString(SR.InvalidNullEmptyArgument, "value"), "value");					
+                    throw new ArgumentException();					
                 }
 
                 name = value;

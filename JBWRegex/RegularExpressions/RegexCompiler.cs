@@ -216,7 +216,8 @@ namespace JBWRegex.RegularExpressions
         
             for (int i=0; i<regexes.Length; i++) {
                 if (regexes[i] == null) {
-                   // throw new ArgumentNullException("regexes", SR.GetString(SR.ArgumentNull_ArrayWithNullElements));
+                    // throw new ArgumentNullException("regexes", SR.GetString(SR.ArgumentNull_ArrayWithNullElements));
+                    throw new ArgumentNullException();
                 }
                 String pattern = regexes[i].Pattern;
                 RegexOptions options = regexes[i].Options;
@@ -3008,8 +3009,8 @@ namespace JBWRegex.RegularExpressions
                     break;
 
                 default:
-                    break;
-                  //  throw new NotImplementedException(SR.GetString(SR.UnimplementedState));
+                //  throw new NotImplementedException(SR.GetString(SR.UnimplementedState));
+                    throw new NotImplementedException();
             }
         }
     }

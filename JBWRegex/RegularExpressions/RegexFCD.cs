@@ -489,8 +489,8 @@ namespace JBWRegex.RegularExpressions
                     break;
 
                 default:
-                    break;
-                   // throw new ArgumentException(SR.GetString(SR.UnexpectedOpcode, NodeType.ToString(CultureInfo.CurrentCulture)));
+                // throw new ArgumentException(SR.GetString(SR.UnexpectedOpcode, NodeType.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentException();
             }
         }
     }

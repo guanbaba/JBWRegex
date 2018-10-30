@@ -239,10 +239,9 @@ namespace JBWRegex.RegularExpressions
                     return 3;
 
                 default:
-                    break;
-                 //   throw MakeException(SR.GetString(SR.UnexpectedOpcode, Opcode.ToString(CultureInfo.CurrentCulture)));
+                //   throw MakeException(SR.GetString(SR.UnexpectedOpcode, Opcode.ToString(CultureInfo.CurrentCulture)));
+                    throw MakeException("unexpected op code");
             }
-            return 0;
         }
 
         internal static ArgumentException MakeException(String message) {
