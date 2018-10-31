@@ -78,7 +78,15 @@ namespace JBWRegex.RegularExpressions
             }
         }
 
-        public string Words
+        public List<Word> WordList
+        {
+            get
+            {
+                return _wordlist.GetRange(_index, _length);
+            }
+        }
+
+        public string WordSeq
         {
             get
             {
@@ -86,7 +94,20 @@ namespace JBWRegex.RegularExpressions
             }
         }
 
-        public string Poss
+        public string WordSeqWithPunc
+        {
+            get
+            {
+                string result = "";
+                foreach (var w in _wordlist.GetRange(_index, _length))
+                {
+                    result += w.prepunc + w.word + w.postpunc;
+                }
+                return result;
+            }
+        }
+
+        public string PosSeq
         {
             get
             {

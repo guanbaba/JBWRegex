@@ -10,14 +10,37 @@ namespace JBWRegex.RegularExpressions
     {
         public string word;
         public string pos;
-        public static bool operator == (Word w1, Word w2)
+        public string candidatepos;
+        public string subcat;
+        public string prepunc="";
+        public string postpunc="";
+        public Word()
         {
-            return w1.word == w2.word && w1.pos == w2.pos;
         }
-        public static bool operator !=(Word w1, Word w2)
+        public Word(Word w)
         {
-            return w1.word != w2.word || w1.pos != w2.pos;
+            word = w.word;
+            pos = w.pos;
+            candidatepos = w.candidatepos;
+            subcat = w.subcat;
+            prepunc = w.prepunc;
+            postpunc = w.postpunc;
         }
-    }
-    
+        public bool IsEqual (Word w)
+        {
+            if (w == null)
+                return false;
+            return word == w.word && pos == w.pos && subcat == w.subcat;
+        }
+        public bool NotEqual(Word w)
+        {
+            if (w == null)
+                return true;
+            return word != w.word || pos != w.pos || subcat != w.subcat;
+        }
+        public bool hasPos(string p)
+        {
+            return candidatepos.Contains(p);
+        }
+    }  
 }

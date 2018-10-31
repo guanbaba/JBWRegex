@@ -832,6 +832,19 @@ namespace JBWRegex.RegularExpressions
         internal static bool CharInClass(char ch, String set) {
             return CharInClassRecursive(ch, set, 0);
         }
+
+        internal static bool StringInClass(string str, String set)
+        {
+            bool flag = false;
+            char[] chars = str.ToCharArray();
+            for (int i = 0; i < chars.Length; i++)
+                if (CharInClass(chars[i], set))
+                {
+                    flag = true;
+                    break;
+                }
+            return flag;
+        }
         
 
         internal static bool CharInClassRecursive(char ch, String set, int start) {

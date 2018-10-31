@@ -300,7 +300,7 @@ namespace JBWRegex.RegularExpressions
             {
                 c--;
                 pos--;
-                if (str[c].ToString() != runwordlist[pos].word && str[c].ToString() != runwordlist[pos].pos)
+                if (str[c].ToString() != runwordlist[pos].word && !runwordlist[pos].hasPos(str[c].ToString()))
                     return false;
             }
 
@@ -380,7 +380,7 @@ namespace JBWRegex.RegularExpressions
             c = len;
 
                 while (c-- != 0)
-                    if (runwordlist[--cmpos] != runwordlist[--pos])
+                    if (runwordlist[--cmpos].NotEqual(runwordlist[--pos]))
                         return false;
 
             if (!runrtl)
@@ -1635,7 +1635,7 @@ namespace JBWRegex.RegularExpressions
                         else
                         {
                             w = Forwardwordnext();
-                            if (w.word != ((char)Operand(0)).ToString() && w.pos != ((char)Operand(0)).ToString())  //*
+                            if (w.word != ((char)Operand(0)).ToString() && !w.hasPos(((char)Operand(0)).ToString()))  //*
                                 break;
                         }
 
@@ -1650,7 +1650,7 @@ namespace JBWRegex.RegularExpressions
                         else
                         {
                             w = Forwardwordnext();
-                            if (w.word == ((char)Operand(0)).ToString() || w.pos == ((char)Operand(0)).ToString())  //*
+                            if (w.word == ((char)Operand(0)).ToString() || w.hasPos(((char)Operand(0)).ToString()))  //*
                                 break;
                         }
 
@@ -1665,7 +1665,7 @@ namespace JBWRegex.RegularExpressions
                         else
                         {
                             w = Forwardwordnext();
-                            if (!RegexCharClass.CharInClass(w.word[0], runstrings[Operand(0)]) && !RegexCharClass.CharInClass(w.pos[0], runstrings[Operand(0)]))  //*
+                            if (!RegexCharClass.CharInClass(w.word[0], runstrings[Operand(0)]) && !RegexCharClass.StringInClass(w.candidatepos, runstrings[Operand(0)]))  //*
                                 break;
                         }
 
@@ -1680,7 +1680,7 @@ namespace JBWRegex.RegularExpressions
                         else
                         {
                             w = Forwardwordnext();
-                            if (!runlists[Operand(0)].Contains(w.word) && !runlists[Operand(0)].Contains(w.pos))  //*
+                            if (!runlists[Operand(0)].Contains(w.word))  //*
                                 break;
                         }
 
@@ -1727,7 +1727,7 @@ namespace JBWRegex.RegularExpressions
                             while (c-- > 0)
                             {
                                 w = Forwardwordnext();
-                                if (w.word != ch.ToString() && w.pos != ch.ToString())    //*
+                                if (w.word != ch.ToString() && !w.hasPos(ch.ToString()))    //*
                                     goto BreakBackward;
                             }
 
@@ -1747,7 +1747,7 @@ namespace JBWRegex.RegularExpressions
                             while (c-- > 0)
                             {
                                 w = Forwardwordnext();
-                                if (w.word == ch.ToString() || w.pos == ch.ToString())    //*
+                                if (w.word == ch.ToString() || w.hasPos(ch.ToString()))    //*
                                     goto BreakBackward;
                             }
 
@@ -1767,7 +1767,7 @@ namespace JBWRegex.RegularExpressions
                             while (c-- > 0)
                             {
                                 w = Forwardwordnext();
-                                if (!RegexCharClass.CharInClass(w.word[0], set) && !RegexCharClass.CharInClass(w.pos[0], set))    //*
+                                if (!RegexCharClass.CharInClass(w.word[0], set) && !RegexCharClass.StringInClass(w.candidatepos, set))    //*
                                     goto BreakBackward;
                             }
 
@@ -1787,7 +1787,7 @@ namespace JBWRegex.RegularExpressions
                             while (c-- > 0)
                             {
                                 w = Forwardwordnext();
-                                if (!list.Contains(w.word) && !list.Contains(w.pos))    //*
+                                if (!list.Contains(w.word))    //*
                                     goto BreakBackward;
                             }
 
@@ -1808,7 +1808,7 @@ namespace JBWRegex.RegularExpressions
                             for (i = c; i > 0; i--)
                             {
                                 w = Forwardwordnext();
-                                if (w.word != ch.ToString() && w.pos != ch.ToString())
+                                if (w.word != ch.ToString() && !w.hasPos(ch.ToString()))
                                 {      //*
                                     Backwardnext();     //输入字符的位置回退一位
                                     break;
@@ -1835,7 +1835,7 @@ namespace JBWRegex.RegularExpressions
                             for (i = c; i > 0; i--)
                             {
                                 w = Forwardwordnext();
-                                if (w.word == ch.ToString() || w.pos == ch.ToString())
+                                if (w.word == ch.ToString() || w.hasPos(ch.ToString()))
                                 {  //*
                                     Backwardnext();
                                     break;
@@ -1862,7 +1862,7 @@ namespace JBWRegex.RegularExpressions
                             for (i = c; i > 0; i--)
                             {
                                 w = Forwardwordnext();
-                                if (!RegexCharClass.CharInClass(w.word[0], set) && !RegexCharClass.CharInClass(w.pos[0], set))
+                                if (!RegexCharClass.CharInClass(w.word[0], set) && !RegexCharClass.StringInClass(w.candidatepos, set))
                                 {  //*
                                     Backwardnext();
                                     break;
@@ -1889,7 +1889,7 @@ namespace JBWRegex.RegularExpressions
                             for (i = c; i > 0; i--)
                             {
                                 w = Forwardwordnext();
-                                if (!list.Contains(w.word) && !list.Contains(w.pos))
+                                if (!list.Contains(w.word))
                                 {  //*
                                     Backwardnext();
                                     break;
@@ -1983,7 +1983,7 @@ namespace JBWRegex.RegularExpressions
                             int pos = TrackPeek(1);
                             Textto(pos);
                             w = Forwardwordnext();
-                            if (w.word != ((char)Operand(0)).ToString() && w.pos != ((char)Operand(0)).ToString())//*
+                            if (w.word != ((char)Operand(0)).ToString() && !w.hasPos(((char)Operand(0)).ToString()))//*
                                 break;
 
                             int i = TrackPeek();
@@ -2001,7 +2001,7 @@ namespace JBWRegex.RegularExpressions
                             int pos = TrackPeek(1);
                             Textto(pos);
                             w = Forwardwordnext();
-                            if (w.word == ((char)Operand(0)).ToString() || w.pos == ((char)Operand(0)).ToString())//*
+                            if (w.word == ((char)Operand(0)).ToString() || w.hasPos(((char)Operand(0)).ToString()))//*
                                 break;
 
                             int i = TrackPeek();
@@ -2019,7 +2019,7 @@ namespace JBWRegex.RegularExpressions
                             int pos = TrackPeek(1);
                             Textto(pos);
                             w = Forwardwordnext();
-                            if (!RegexCharClass.CharInClass(w.word[0], runstrings[Operand(0)]) && !RegexCharClass.CharInClass(w.pos[0], runstrings[Operand(0)]))//*
+                            if (!RegexCharClass.CharInClass(w.word[0], runstrings[Operand(0)]) && !RegexCharClass.StringInClass(w.candidatepos, runstrings[Operand(0)]))//*
                                 break;
 
                             int i = TrackPeek();
