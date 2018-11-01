@@ -299,9 +299,12 @@ namespace JBWRegex.RegularExpressions
                 _counting = false;
             }
 
-            fcPrefix = RegexFCD.FirstChars(tree);
+            //fcPrefix = RegexFCD.FirstChars(tree);
 
-            prefix = RegexFCD.Prefix(tree);
+            //prefix = RegexFCD.Prefix(tree);
+            fcPrefix = null;
+            prefix = null;
+
             rtl = ((tree._options & RegexOptions.RightToLeft) != 0);
 
             CultureInfo culture = (tree._options & RegexOptions.CultureInvariant) != 0 ? CultureInfo.InvariantCulture : CultureInfo.CurrentCulture;
